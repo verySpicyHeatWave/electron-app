@@ -7,12 +7,19 @@ VALDELTA: float = MAXVAL - MINVAL
 
 class DataProducer():
     def __init__(self):
-        self.vals: list[float] = [0, 0, 0, 0, 0, 0]
-    
+        self.vals: dict[str, float] = {
+            "val1" : 0,
+            "val2" : 0,
+            "val3" : 0,
+            "val4" : 0,
+            "val5" : 0,
+            "val6" : 0
+        }
+
     def generate_data(self):
-        for val in self.vals:
-            val = (random.random() * VALDELTA) + MINVAL
-            print(val)
+        for key, val in self.vals.items():
+            val = round(((random.random() * VALDELTA) + MINVAL), 3)
+            print(f"{key}: {val}")
 
 if __name__ == "__main__":
     producer = DataProducer()

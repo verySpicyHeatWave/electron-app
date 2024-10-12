@@ -9,3 +9,4 @@ backend/__pycache__/
 # Frondend related ignores
 frontend/node_modules/
 frontend/out/
+plan.txt
