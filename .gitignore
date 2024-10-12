@@ -1,0 +1,11 @@
+# Main directory ignores
+.mypy_cache/
+.vscode/
+
+# Backend related ignores
+backend/venv/
+backend/__pycache__/
+
+# Frondend related ignores
+frontend/node_modules/
+frontend/out/
