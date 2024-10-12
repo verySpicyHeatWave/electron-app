@@ -1,0 +1,60 @@
+######## Links: ###############################################
+
+# Docs: Javascript
+https://developer.mozilla.org/en-US/docs/Web/JavaScript
+
+# Docs: HTML
+https://developer.mozilla.org/en-US/docs/Web/HTTP
+
+# Docs: CSS
+https://developer.mozilla.org/en-US/docs/Web/CSS
+
+# Docs: Electron.js
+https://www.electronjs.org/docs/latest/
+
+
+
+# Docs: Python
+https://www.python.org/doc/
+
+# Docs: Flask
+https://flask.palletsprojects.com/en/3.0.x/#
+
+# Docs: Node.js
+https://nodejs.org/docs/latest/api/
+
+
+
+# Docs: RabbitMQ
+https://www.rabbitmq.com/docs
+https://www.rabbitmq.com/tutorials
+
+
+
+# Tutorial: Python backend with Javascript frontend
+https://tms-dev-blog.com/python-backend-with-javascript-frontend-how-to/
+
+
+
+
+
+######## Setting up Python backend: ###########################
+1)	mkdir backend                               # make a folder for the backend stuff
+2)	cd backend                                  # go to it
+3)  python -m venv venv                         # create a virtual environment
+4)  ./venv/Scripts/activate                     # activate the venv
+5)  pip install flask flask-cors                # install flask
+
+
+
+
+######## Setting up Electron frontend: ########################
+1)	mkdir frontend                              # make a folder for the frontend stuff
+2)	cd frontend                                 # go to it
+3)  npm init                                    # initialize the node.js package
+4)  npm install --save-dev electron             # install Electron into the node package
+5)  add "start": "electron ." to package.json 'script' section
+6)  npm install --save-dev @electron-forge/cli  # install the Electron forge, used for deployment
+
+
+
