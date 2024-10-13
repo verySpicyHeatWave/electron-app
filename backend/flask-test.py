@@ -22,4 +22,4 @@ def hello_special(special):
     return f"Well isn't that just fucking {special}"
 
 if __name__ == "__main__":
-    app.run("localhost", 6969)
+    app.run("localhost", 5000)
