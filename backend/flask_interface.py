@@ -65,7 +65,7 @@ def stream_data():
                 try:
                     msg = subscriber.get(block=True, timeout=1.2)
                     print(subscriber.qsize())
-                    yield msg
+                    yield f"Data:{msg}\n\n"
                 except queue.Full:
                     print("What the fuck?! We're full!")
                     yield "WHAT THE FUCK! We're full!"

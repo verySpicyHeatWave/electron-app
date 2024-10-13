@@ -40,9 +40,15 @@ function getDate() {
 })();
 
 function startStream() {
-    const eventSource = new EventSource('http://127.0.0.1:5000/data');
-    eventSource.onmessage = function(event) {
-        dataDiv = document.getElementById('result-container');
-        dataDiv.innerHTML = event.data;
-    };
+    console.log("starting stream...")
+    const eventSource = new EventSource('http://127.0.0.1:5000/stream');
+    eventSource.onopen = e => console.log('opened', e);
+    eventSource.onerror = e => console.log('error', e);
+    eventSource.onmessage = e => console.log(e.data, e);
+    //     {
+    //     console.log("new event!");
+    //     dataDiv = document.getElementById('result-container');
+    //     dataDiv.innerHTML = e.data;
+    //     console.log(e.data);
+    // };
 }
