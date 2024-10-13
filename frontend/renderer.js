@@ -1,5 +1,6 @@
 var xhr = null;
 document.getElementById("get-message").addEventListener("click", getMessage);
+window.addEventListener("load", startStream);
 
 getXmlHttpRequestObject = function () {
     if (!xhr) {
@@ -37,3 +38,11 @@ function getDate() {
 (function () {
     getDate();
 })();
+
+function startStream() {
+    const eventSource = new EventSource('http://127.0.0.1:5000/data');
+    eventSource.onmessage = function(event) {
+        dataDiv = document.getElementById('result-container');
+        dataDiv.innerHTML = event.data;
+    };
+}

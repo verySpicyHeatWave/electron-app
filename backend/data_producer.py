@@ -20,13 +20,13 @@ class DataProducer():
         self.maxv: float = maxv
 
     def generate_data(self):
-        for key, val in self.vals.items():
+        for key in self.vals.keys():
             if key == "name": 
                 continue
             self.vals[key] = round(((random.random() * (self.maxv - self.minv)) + self.minv), 3)
     
     def begin_stream(self, exchange_name='data'):
-        print(f"Beginning stream for {self.vals["name"]}")
+        print(f"Beginning stream for {self.vals["name"]} on exchange {exchange_name}")
         connection = pika.BlockingConnection(pika.ConnectionParameters(host='127.0.0.1'))
         channel = connection.channel()
 
@@ -42,7 +42,7 @@ class DataProducer():
                             body=message)
                 print(message)
         except KeyboardInterrupt:
-            print(f"Killing stream for {self.vals["name"]}")
+            print(f"Killing stream for {self.vals["name"]} on exchange {exchange_name}")
             connection.close()
             
 
