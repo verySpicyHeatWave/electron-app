@@ -1,6 +1,6 @@
 var xhr = null;
 document.getElementById("get-message").addEventListener("click", getMessage);
-window.addEventListener("load", startStream);
+window.addEventListener("load", fetchStream);
 
 getXmlHttpRequestObject = function () {
     if (!xhr) {
@@ -39,16 +39,32 @@ function getDate() {
     getDate();
 })();
 
-function startStream() {
-    console.log("starting stream...")
-    const eventSource = new EventSource('http://127.0.0.1:5000/stream');
-    eventSource.onopen = e => console.log('opened', e);
-    eventSource.onerror = e => console.log('error', e);
-    eventSource.onmessage = e => console.log(e.data, e);
-    //     {
-    //     console.log("new event!");
-    //     dataDiv = document.getElementById('result-container');
-    //     dataDiv.innerHTML = e.data;
-    //     console.log(e.data);
-    // };
+async function fetchStream() {
+    const response = await fetch('http://127.0.0.1:5000/stream');
+
+    if (!response.ok) {
+        console.error('Network response was not ok');
+        return;
+    }
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder('utf-8');
+    const dataDisplay = document.getElementById('data');
+
+    while (true) {
+        const { done, value } = await reader.read();
+
+        if (done) {
+            console.log('Stream finished.');
+            break;
+        }
+
+        const chunk = decoder.decode(value, { stream: true });
+        dataDisplay.innerHTML = chunk;
+        dataDisplay.scrollTop = dataDisplay.scrollHeight; // Auto-scroll to the bottom
+    }
 }
+
+// Things I need to read about:
+//      async/await (I sort of understand them, but not fully)
+//      fetch (what does that method do? What object is it returning? What is the "getReader" method?)

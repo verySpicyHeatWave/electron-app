@@ -18,7 +18,13 @@ def get_data_callback(ch, method, properties, body):
     message = body.decode('utf-8')
     messages.append(message)
     # print(f"Received: {message}")
-    subscriber.put_nowait(message)
+    try:
+        subscriber.put_nowait(message)
+    except queue.Full:
+        print("What the fuck?! We're full!")
+        while subscriber.not_empty:
+            subscriber.get()
+        time.sleep(1)
 
 def consume_data():
     # print("condume_data() called")
@@ -64,12 +70,8 @@ def stream_data():
             while True:
                 try:
                     msg = subscriber.get(block=True, timeout=1.2)
-                    print(subscriber.qsize())
-                    yield f"Data:{msg}\n\n"
-                except queue.Full:
-                    print("What the fuck?! We're full!")
-                    yield "WHAT THE FUCK! We're full!"
-                    time.sleep(1)
+                    print(f"Received: {msg}")
+                    yield f"Data: {msg}\n\n"
                 except queue.Empty:
                     print("What the fuck?! We're empty!")
                     yield "WHAT THE FUCK! We're empty!"
