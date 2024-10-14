@@ -17,17 +17,15 @@ last_msg: 0
 def get_data_callback(ch, method, properties, body):
     message = body.decode('utf-8')
     messages.append(message)
-    # print(f"Received: {message}")
     try:
         subscriber.put_nowait(message)
     except queue.Full:
         print("What the fuck?! We're full!")
         while subscriber.not_empty:
-            subscriber.get()
+            print(f"Deleting entry: {subscriber.get()}")
         time.sleep(1)
 
 def consume_data():
-    # print("condume_data() called")
     exchange_name = "data1"
     connection = pika.BlockingConnection(pika.ConnectionParameters(host='127.0.0.1'))
     channel = connection.channel()
@@ -45,9 +43,7 @@ def consume_data():
 
     channel.start_consuming()
 
-# print("Starting the new thread...")
 threading.Thread(target=consume_data, daemon=True).start()
-# print("Started!")
 
 @app.route("/")
 def hello() -> str:
@@ -73,9 +69,9 @@ def stream_data():
                     print(f"Received: {msg}")
                     yield f"Data: {msg}\n\n"
                 except queue.Empty:
-                    print("What the fuck?! We're empty!")
-                    yield "WHAT THE FUCK! We're empty!"
-                    time.sleep(1)
+                    print("We're not getting any more data!")
+                    yield "Data: TIMEOUT\n\n"
+                    time.sleep(4)
         except KeyboardInterrupt:
             print("We're quitting!")
 

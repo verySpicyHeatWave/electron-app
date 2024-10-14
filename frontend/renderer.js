@@ -59,12 +59,7 @@ async function fetchStream() {
             break;
         }
 
-        const chunk = decoder.decode(value, { stream: true });
-        dataDisplay.innerHTML = chunk;
-        dataDisplay.scrollTop = dataDisplay.scrollHeight; // Auto-scroll to the bottom
+        const data = decoder.decode(value, { stream: true });
+        dataDisplay.innerHTML = data;
     }
 }
-
-// Things I need to read about:
-//      async/await (I sort of understand them, but not fully)
-//      fetch (what does that method do? What object is it returning? What is the "getReader" method?)

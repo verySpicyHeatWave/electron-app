@@ -58,3 +58,27 @@ https://tms-dev-blog.com/python-backend-with-javascript-frontend-how-to/
 
 
 
+
+
+Things I don't fully understand:
+    JAVASCRIPT:
+        async/await :: I sort of understand them, but not fully
+        fetch :: what does this method DO, exactly? What sort of object is it returning? What is the "getReader" method that it is able to call?
+        require :: Why does this method return things? It seems to behave very differently from the import/include calls I'm used to seeing.
+
+    PYTHON:
+        yield :: I know it creates a "generator". I think I get it--it doesn't RETURN, thus ending a function, but rather it pauses the function's execution until it's called again? I think? I can play with that and test it.
+        Queue object :: I understand it pretty fully, but I really just want to look into best practices and think more about how I'm using it here, and decide whether or not it's really the best option. I think it is, since it will block and wait for the next message, but I have to think about when a battery times out. Would help to see how Matt handled it in the SIL II GUI.
+        Threads :: Similar to the other two, I just want a better idea of WHEN and HOW to use threads more effectively. I understand threads and multithreading, but when do I want to use it when building an application like this?
+
+    RABBITMQ / PIKA:
+        Connection objects :: How many different options are there, and why might I prefer a "BlockingConnection" over some other type?
+        Exchange Types :: I know there are four types, and that I'm using fanout. How do the other types behave?
+
+    HTML:
+        Content-Security-Policy :: I want to know more about the options before me. I think I've got the options set how I want them, but what if there are other options that I might want? And what does 'self' REALLY mean?
+        Meta tags :: Again, what sort of meta tags are available to me and what should I use?
+        Div/Span tags :: What are these REALLY for, as opposed to using something like the Label tag?
+
+    NODE / ELECTRON:
+        preload.js :: What's good to put into this file? I have a feeling that one of the functions I have in my renderer.js file should actually be in THIS file.

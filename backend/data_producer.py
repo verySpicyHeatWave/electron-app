@@ -47,9 +47,6 @@ class DataProducer():
             
 
 if __name__ == "__main__":
-    # Just run this in three separate terminals
-    # Take four arguments in: The name of the producer, the name of the exchange, the minimum value, and the maximum value.
-    # Then we'll stream until I cancel it.
     if len(sys.argv) != 5:
         exit(5)
         
