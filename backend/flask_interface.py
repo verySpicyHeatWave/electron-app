@@ -10,7 +10,7 @@ import time
 app = Flask(__name__)
 CORS(app=app)
 
-subscriber = queue.Queue(maxsize=60)
+subscriber = queue.Queue(maxsize=5)
 messages=[]
 last_msg: 0
 
@@ -69,7 +69,7 @@ def stream_data():
                     print(f"Received: {msg}")
                     yield f"Data: {msg}\n\n"
                 except queue.Empty:
-                    print("We're not getting any more data!")
+                    print("We're not getting any data!")
                     yield "Data: TIMEOUT\n\n"
                     time.sleep(4)
         except KeyboardInterrupt:
