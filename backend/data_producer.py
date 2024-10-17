@@ -156,7 +156,7 @@ class DataProducer(threading.Thread):
         for i, (key, val) in enumerate(self.parent.tempvars.items()):
             self.vals[f"{key}_temp"] = val.get()
     
-    def begin_stream(self, exchange_name='data'):
+    def begin_stream(self, exchange_name='data1'):
         print(f"Beginning stream for {self.format_pnsn(self.vals['battery_pn'], self.vals['battery_sn'])} on exchange {exchange_name}")
         connection = pika.BlockingConnection(pika.ConnectionParameters(host='127.0.0.1'))
         channel = connection.channel()
