@@ -7,8 +7,8 @@ import sys
 import time
 import tkinter as tk
 
-WIN_W: int = 800
-WIN_H: int = 600
+WIN_W: int = 600
+WIN_H: int = 400
 
 class MainWindow(tk.Tk):
     def __init__(self):
@@ -33,6 +33,8 @@ class MainWindow(tk.Tk):
                          tk.DoubleVar(None, value=3.5)]
         self.pnvar = tk.IntVar(None, 102051000)
         self.snvar = tk.IntVar(None, 1)
+        self.currentvar = tk.DoubleVar(None, value=0)
+        self.dpovar = tk.BooleanVar(None, value=False)
         self.tempvars = {
             "pack" : tk.IntVar(None, 25),
             "bms" : tk.IntVar(None, 25),
@@ -42,18 +44,20 @@ class MainWindow(tk.Tk):
         }
 
         # Define widgets
-        self.startstop: tk.Button = tk.Button(self, text="Start/Stop Dataflow", command=self.toggle_stream)
-        self.status: tk.Label = tk.Label(self, text="Stopped", font=("Segoe-UI", 18, "bold"), fg="black", bg="white")
+        self.startstop: tk.Button = tk.Button(self, text="Start/Stop Dataflow", command=self.toggle_stream, anchor='n')
+        self.status: tk.Label = tk.Label(self, text="Stopped", font=("Segoe-UI", 18, "bold"), fg="black", bg="white", anchor='n')
         cellv_frame: tk.Frame = self.create_cellv_frame()
         pnsn_frame: tk.Frame = self.create_pnsn_frame()
+        other_frame: tk.Frame = self.create_other_frame()
         temp_frame: tk.Frame = self.create_temp_frame()
 
         # Place widgets
         self.startstop.grid(row=0, column=0)
-        self.status.grid(row=0, column=1, padx=20)
-        cellv_frame.grid(row=1, column=1, padx=20, pady=20, rowspan=2)
-        pnsn_frame.grid(row=1, column=2, padx=20, pady=20)
-        temp_frame.grid(row=2, column=2, padx=20, pady=20)
+        self.status.grid(row=0, column=1, padx=20, sticky='nsew')
+        cellv_frame.grid(row=1, column=0, padx=20, pady=20, rowspan=2, sticky='nsew')
+        pnsn_frame.grid(row=1, column=1, padx=20, pady=20, sticky='nsew')
+        other_frame.grid(row=2, column=1, padx=20, pady=20, sticky='nsew')
+        temp_frame.grid(row=1, column=2, padx=20, pady=20, rowspan=2, sticky='nsew')
 
 
     def create_cellv_frame(self):
@@ -79,6 +83,17 @@ class MainWindow(tk.Tk):
         lbl2.grid(row=1, column=0, padx=10, pady=10)
         snent.grid(row=1, column=1, padx=10, pady=10)
         return pnsn_frame
+    
+    def create_other_frame(self):
+        other_frame: tk.Frame = tk.Frame(self)
+        lbl: tk.Label = tk.Label(other_frame, text=f"current:")
+        box: tk.Spinbox = tk.Spinbox(other_frame, from_=0, to=144, increment=1,
+                                        textvariable=self.currentvar, width=7)
+        ckbx: tk.Checkbutton = tk.Checkbutton(other_frame, text="dpo en?", variable=self.dpovar)
+        lbl.grid(row=0, column=0, padx=10, pady=10)
+        box.grid(row=0, column=1, padx=10, pady=10)
+        ckbx.grid(row=1, column=0, padx=20, pady=20, columnspan=2)
+        return other_frame
     
     def create_temp_frame(self):
         temp_frame: tk.Frame = tk.Frame(self)
@@ -147,7 +162,10 @@ class DataProducer(threading.Thread):
     def generate_data(self):
         self.vals['battery_pn'] = self.parent.pnvar.get()
         self.vals['battery_sn'] = self.parent.snvar.get()
+        self.vals["pack_current"] = self.parent.currentvar.get()
+        self.vals["dpo"] = self.parent.dpovar.get()
         self.vals["pack_voltage"] = 0
+
         for i in range(1,9):
             cellv = self.put_variation_on_cell_voltage(self.parent.cellvars[i-1].get())
             self.vals[f"cell{i}_voltage"] = cellv
@@ -155,6 +173,7 @@ class DataProducer(threading.Thread):
             
         for i, (key, val) in enumerate(self.parent.tempvars.items()):
             self.vals[f"{key}_temp"] = val.get()
+        
     
     def begin_stream(self, exchange_name='data1'):
         print(f"Beginning stream for {self.format_pnsn(self.vals['battery_pn'], self.vals['battery_sn'])} on exchange {exchange_name}")
