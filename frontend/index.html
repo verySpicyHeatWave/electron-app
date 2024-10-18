@@ -6,20 +6,16 @@
     <meta charset="UTF-8">
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' http://127.0.0.1:5000/; script-src 'self'">
-    <title>Hello World!</title>
+    <title>Mock Battery Monitor</title>
     <link id="main-css" rel="stylesheet" type="text/css" href="styles.css">
   </head>
 
   <body>
-    <h1>Hello World!</h1>
-    We are using Node.js <span id="node-version"></span>,
-    Chromium <span id="chrome-version"></span>,
-    and Electron <span id="electron-version"></span>.<br>
-    <div>This is simple test to get data from a backend</div>
+    <h1>Mock Battery Monitor!</h1>
     <div><span>Last update: </span><span id="time-container"></span></div>
     <button id="get-message">Get message</button>
     <div id="result-container">Push the button...</div>
-    <div id="data">No data received...</div>
+    <div><span>Raw data: </span><span id="data">No data received...</span></div>
     <script src="./renderer.js"></script>
   
   </body>

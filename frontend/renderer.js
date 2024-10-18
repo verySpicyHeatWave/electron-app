@@ -34,6 +34,7 @@ function fetchData(address, eid, streaming) {
             const data = decoder.decode(value, { stream: streaming });
             dataDisplay.innerHTML = data;
             determineState(data);
+            getDate();
         } while ( streaming );
     } //"Uncaught (in promise) TypeError: Failed to fetch" when the server resets without the GUI resetting -- how to handle?
 }

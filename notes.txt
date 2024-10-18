@@ -34,6 +34,9 @@ https://www.rabbitmq.com/tutorials
 # Tutorial: Python backend with Javascript frontend
 https://tms-dev-blog.com/python-backend-with-javascript-frontend-how-to/
 
+# Tutorial: Building a deployable Python-Electron App
+https://medium.com/@abulka/electron-python-4e8c807bfa5e
+
 
 
 
