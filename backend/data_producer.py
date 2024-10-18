@@ -52,8 +52,8 @@ class MainWindow(tk.Tk):
         temp_frame: tk.Frame = self.create_temp_frame()
 
         # Place widgets
-        self.startstop.grid(row=0, column=0)
-        self.status.grid(row=0, column=1, padx=20, sticky='nsew')
+        self.startstop.grid(row=0, column=0, padx=20, pady=(20,0))
+        self.status.grid(row=0, column=1, padx=20, pady=(20,0), sticky='nsew')
         cellv_frame.grid(row=1, column=0, padx=20, pady=20, rowspan=2, sticky='nsew')
         pnsn_frame.grid(row=1, column=1, padx=20, pady=20, sticky='nsew')
         other_frame.grid(row=2, column=1, padx=20, pady=20, sticky='nsew')

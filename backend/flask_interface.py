@@ -23,7 +23,7 @@ def get_data_callback(ch, method, properties, body):
         print("What the fuck?! We're full!")
         while subscriber.not_empty:
             print(f"Deleting entry: {subscriber.get()}")
-        time.sleep(1)
+        time.sleep(1.2)
 
 def consume_data():
     exchange_name = "data1"
@@ -71,7 +71,7 @@ def stream_data():
                 except queue.Empty:
                     print("We're not getting any data!")
                     yield "Data: TIMEOUT\n\n"
-                    time.sleep(4)
+                    time.sleep(1.2)
         except KeyboardInterrupt:
             print("We're quitting!")
 
