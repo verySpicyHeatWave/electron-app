@@ -11,7 +11,7 @@ WIN_W: int = 600
 WIN_H: int = 400
 
 class MainWindow(tk.Tk):
-    def __init__(self):
+    def __init__(self, exchange = "data1"):
         # Main Window Configuration
         super().__init__(None)
         self.title('Fake Battery Data Generator')
@@ -20,9 +20,10 @@ class MainWindow(tk.Tk):
         self.geometry(f"{WIN_W}x{WIN_H}")
         self.resizable(True, True)
         self.verify_entry_is_number = (self.register(self.numentry_verify_callback))
+        self.exchange = exchange
 
         # Instance fields
-        self.producer_thread: DataProducer = DataProducer(parent=self)
+        self.producer_thread: DataProducer = DataProducer(parent=self, exchange=self.exchange)
         self.cellvars = [tk.DoubleVar(None, value=3.5),
                          tk.DoubleVar(None, value=3.5),
                          tk.DoubleVar(None, value=3.5),
@@ -112,7 +113,7 @@ class MainWindow(tk.Tk):
             print("Ending stream...\n\n")
             self.status.config(text="Stopped", fg="black")
         else:
-            self.producer_thread = DataProducer(parent=self)
+            self.producer_thread = DataProducer(parent=self, exchange=self.exchange)
             self.producer_thread.start()
             self.status.config(text="Running", fg="red")
 
@@ -131,9 +132,10 @@ class MainWindow(tk.Tk):
 
 
 class DataProducer(threading.Thread):
-    def __init__(self, parent: MainWindow):
+    def __init__(self, parent: MainWindow, exchange: str):
         super().__init__(None)
         self.parent = parent
+        self.exchange = exchange
         self.vals = {
             "battery_pn" : 0,
             "battery_sn" : 0,
@@ -147,6 +149,8 @@ class DataProducer(threading.Thread):
             "cell6_voltage" : 0,
             "cell7_voltage" : 0,
             "cell8_voltage" : 0,
+            "cell_average" : 0,
+            "cell_range" : 0,
             "pack_temp" : 0,
             "bms_temp" : 0,
             "cfet_temp" : 0,
@@ -157,22 +161,32 @@ class DataProducer(threading.Thread):
         self.setv: float = 3.5
 
     def run(self):
-        self.begin_stream()
+        self.begin_stream(self.exchange)
 
     def generate_data(self):
-        self.vals['battery_pn'] = self.parent.pnvar.get()
-        self.vals['battery_sn'] = self.parent.snvar.get()
-        self.vals["pack_current"] = self.parent.currentvar.get()
-        self.vals["dpo"] = self.parent.dpovar.get()
-        self.vals["pack_voltage"] = 0
+        maxcell = 0
+        mincell = 5
+        packv = 0
 
         for i in range(1,9):
             cellv = self.put_variation_on_cell_voltage(self.parent.cellvars[i-1].get())
             self.vals[f"cell{i}_voltage"] = cellv
-            self.vals["pack_voltage"] += cellv
+            packv += cellv
+
+            if cellv > maxcell: maxcell = cellv
+            if cellv < mincell: mincell = cellv
             
         for i, (key, val) in enumerate(self.parent.tempvars.items()):
             self.vals[f"{key}_temp"] = val.get()
+
+        self.vals['battery_pn'] = self.parent.pnvar.get()
+        self.vals['battery_sn'] = self.parent.snvar.get()
+        self.vals["pack_current"] = self.parent.currentvar.get()
+        self.vals["dpo"] = self.parent.dpovar.get()
+        self.vals["pack_voltage"] = round(packv, 3)
+        self.vals["cell_average"] = round(packv / 8, 3)
+        self.vals["cell_range"] = round(maxcell - mincell, 3)
+        ## add average and range calculations to back-end
         
     
     def begin_stream(self, exchange_name='data1'):
@@ -216,5 +230,11 @@ class DataProducer(threading.Thread):
             
 
 if __name__ == "__main__":
-    main: MainWindow = MainWindow()
+    exch = 'data1'
+    if len(sys.argv) != 2:
+        print("You should enter the exchange name as an argument!\ne.g.: 'python.exe data_producer.py data1'\n\nDefaulting to 'data1'...\n\n")
+    else:
+        exch = sys.argv[1] 
+
+    main: MainWindow = MainWindow(exch)
     main.mainloop()

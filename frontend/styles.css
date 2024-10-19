@@ -1,3 +1,67 @@
+body {
+  padding: 0 20px;
+  font-family: 'Open Sans', sans-serif;
+  background-color: #f5f7ff;
+}
+
+.data-container {
+  width: 500px;
+  overflow: hidden;
+  display: grid; /*Just added this--might delete later idk*/
+}
+
+.pack-criticals, .cellv-container, .temp-container, .msg-counters {
+  border: 2px solid #333333;
+  border-radius: 10px;
+  background-image: linear-gradient(64deg, #d8d8d8, #f5f5f5);
+  margin: 10px 0px;
+  padding: 2px 5px;
+  font-weight: 700;
+}
+
+.pack-criticals {
+  width: 250px;
+}
+
+.cellv-container, .temp-container{
+  width: 120px;
+  float: left;
+}
+
+.msg-counters {
+  width: 120px;
+  margin-top: 150px;
+  float: left;
+}
+
+.cellv-container {
+  margin-right: 20px;
+}
+
+.emphasize {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 2px;
+}
+
+.normal {  
+  font-size: 14px;
+  font-weight: 600;
+  margin: 2px;
+}
+
+.value {
+  font-weight: 400;  
+  /* display: flex;
+  justify-content: space-between;
+  align-items: flex-end; */
+  float:right;
+}
+
+.divider {
+  border-bottom: 1px solid #999999;
+}
+
 button {
     background-image: linear-gradient(#42A1EC, #0070C9);
     border: 1px solid #0077CC;

@@ -12,6 +12,9 @@ https://developer.mozilla.org/en-US/docs/Web/CSS
 # Docs: Electron.js
 https://www.electronjs.org/docs/latest/
 
+# Docs: Node.js
+https://nodejs.org/docs/latest/api/
+
 
 
 # Docs: Python
@@ -20,8 +23,8 @@ https://www.python.org/doc/
 # Docs: Flask
 https://flask.palletsprojects.com/en/3.0.x/#
 
-# Docs: Node.js
-https://nodejs.org/docs/latest/api/
+# Docs: Python's C-api
+https://docs.python.org/3/c-api/init.html
 
 
 

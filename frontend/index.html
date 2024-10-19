@@ -4,14 +4,48 @@
 
   <head>
     <meta charset="UTF-8">
-    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' http://127.0.0.1:5000/; script-src 'self'">
     <title>Mock Battery Monitor</title>
     <link id="main-css" rel="stylesheet" type="text/css" href="styles.css">
   </head>
 
   <body>
-    <h1>Mock Battery Monitor!</h1>
+    <h1>Mock Battery Monitor</h1>
+    <div class="pack-criticals">
+      <p class="emphasize">Pack Voltage: <span id="pack-voltage" class="value">33.567V</span></p>
+      <p class="emphasize">Pack Current: <span id="pack-current" class="value">0.000A</span></p>
+    </div>
+    <div class="data-container">
+      <div class="cellv-container">Cell Voltages
+        <p class="normal">Cell 1: <span id="cell1-voltage" class="value">4.196V</span></p>
+        <p class="normal">Cell 2: <span id="cell2-voltage" class="value">4.195V</span></p>
+        <p class="normal">Cell 3: <span id="cell3-voltage" class="value">4.197V</span></p>
+        <p class="normal">Cell 4: <span id="cell4-voltage" class="value">4.194V</span></p>
+        <p class="normal">Cell 5: <span id="cell5-voltage" class="value">4.197V</span></p>
+        <p class="normal">Cell 6: <span id="cell6-voltage" class="value">4.197V</span></p>
+        <p class="normal">Cell 7: <span id="cell7-voltage" class="value">4.196V</span></p>
+        <p class="normal">Cell 8: <span id="cell8-voltage" class="value">4.195V</span></p>
+        <div class="divider"></div>
+        <p class="normal">Average: <span id="cell-average" class="value">4.196V</span></p>
+        <p class="normal">Range: <span id="cell-range" class="value">0.003V</span></p>
+      </div>
+      <div class="temp-container">Temperatures
+        <p class="normal">Pack 1: <span id="pack1-temp" class="value">25°C</span></p>
+        <p class="normal">Pack 2: <span id="pack2-temp" class="value">25°C</span></p>
+        <p class="normal">BMS: <span id="bms-temp" class="value">25°C</span></p>
+        <p class="normal">DFET: <span id="dfet-temp" class="value">25°C</span></p>
+        <p class="normal">CFET: <span id="cfet-temp" class="value">25°C</span></p>
+        <p class="normal">PCBA: <span id="pcba-temp" class="value">25°C</span></p>
+      </div>
+      <div class="msg-counters">Counters
+        <p class="normal">Messages: <span id="msg-count" class="value">0</span></p>
+        <p class="normal">Timeouts: <span id="msg-timeouts" class="value">0</span></p>
+      </div>
+    </div>
+
+
+
+
     <div><span>Last update: </span><span id="time-container"></span></div>
     <button id="get-message">Get message</button>
     <div id="result-container">Push the button...</div>
