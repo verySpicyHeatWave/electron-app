@@ -26,6 +26,9 @@ https://flask.palletsprojects.com/en/3.0.x/#
 # Docs: Python's C-api
 https://docs.python.org/3/c-api/init.html
 
+# Docs: Python's sqlite3 library:
+https://docs.python.org/3/library/sqlite3.html
+
 
 
 # Docs: RabbitMQ
