@@ -36,24 +36,27 @@ function fetchData(address, eid, streaming) {
 
             const data = decoder.decode(value, { stream: streaming });
             dataDisplay.innerHTML = data;
-            determineState(data);
+            if (determineMsgState(data)) {
+                pack_form(data);
+            }
             getDate();
         } while ( streaming );
     } //"Uncaught (in promise) TypeError: Failed to fetch" when the server resets without the GUI resetting -- how to handle?
 }
 
 
-function determineState(data) {
+function determineMsgState(data) {
     if (data.includes("battery_pn")) {
         msg_count += 1;
         document.getElementById("msg-count").innerHTML = msg_count;
         document.getElementById("main-css").href = "styles.css";
-        pack_form(data);
+        return true;
     }
     else {
         msg_timeout += 1;
         document.getElementById("msg-timeouts").innerHTML = msg_timeout;
         // document.getElementById("main-css").href = "styles_timeout.css"
+        return false;
     }
 }
 
@@ -81,6 +84,9 @@ function pack_form(data) {
     document.getElementById("cfet-temp").innerHTML = obj.cfet_temp.toString().concat("°C");
     document.getElementById("dfet-temp").innerHTML = obj.dfet_temp.toString().concat("°C");
     document.getElementById("pcba-temp").innerHTML = obj.board_temp.toString().concat("°C");
+    document.getElementById("part-number").innerHTML = obj.battery_pn.toString();
+    document.getElementById("serial-number").innerHTML = "SN".concat(obj.battery_sn.toString());
+    colorStatusBits(obj);
 }
 
 
@@ -144,4 +150,9 @@ function createCellElementsArray() {
         document.getElementById("cell7-voltage"),
         document.getElementById("cell8-voltage")];
     return cellElements;
+}
+
+
+function colorStatusBits(obj) {
+    console.log("BCOBB: To-Do!")
 }

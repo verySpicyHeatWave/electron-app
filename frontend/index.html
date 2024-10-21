@@ -11,12 +11,14 @@
 
   <body>
     <h1>Mock Battery Monitor</h1>
-    <div class="grid-container">
-      <div class="pack-criticals">
-        <p class="emphasize">Pack Voltage: <span id="pack-voltage" class="value">33.567V</span></p>
-        <p class="emphasize">Pack Current: <span id="pack-current" class="value">0.000A</span></p>
+    <div class="grid-container box">
+      <div class="pack-criticals content-box">
+        <p class="box-header">Pack Power Information</p>
+        <div class="divider bottom-spaced"></div>
+        <p class="emphasize">Voltage: <span id="pack-voltage" class="value">33.567V</span></p>
+        <p class="emphasize">Current: <span id="pack-current" class="value">0.000A</span></p>
       </div>
-      <div class="cellv-container">
+      <div class="cellv-container content-box">
         <p class="box-header">Cell Voltages</p>
         <div class="divider bottom-spaced"></div>
         <p class="normal">Cell 1: <span id="cell1-voltage" class="value">-</span></p>
@@ -31,7 +33,7 @@
         <p class="normal">Average: <span id="cell-average" class="value">-</span></p>
         <p class="normal">Range: <span id="cell-range" class="value">-</span></p>
       </div>
-      <div class="temp-container">
+      <div class="temp-container content-box">
         <p class="box-header">Temperatures</p>
         <div class="divider bottom-spaced"></div>
         <p class="normal">Pack 1: <span id="pack1-temp" class="value">-</span></p>
@@ -41,18 +43,90 @@
         <p class="normal">CFET: <span id="cfet-temp" class="value">-</span></p>
         <p class="normal">PCBA: <span id="pcba-temp" class="value">-</span></p>
       </div>
-      <div class="msg-counters" id="msg-counters">
+      <div class="msg-counters content-box" id="msg-counters">
         <p class="box-header">Counters</p>
         <div class="divider bottom-spaced"></div>
         <p class="normal">Messages: <span id="msg-count" class="value">0</span></p>
         <p class="normal">Timeouts: <span id="msg-timeouts" class="value">0</span></p>
         <span class="tooltiptext">Double click this block to reset the values</span>
       </div>
+      <div class="pnsn-container content-box">
+        <p class="box-header">Product Identifiers</p>
+        <div class="divider bottom-spaced"></div>
+        <p class="normal">Battery P/N: <span id="battery-pn" class="value">134217727</span></p>
+        <p class="normal">Battery S/N: <span id="battery-sn" class="value">SN65535</span></p>
+        <p class="normal">PCBA P/N: <span id="battery-pn" class="value">268435455</span></p>
+        <p class="normal">PCBA S/N: <span id="battery-sn" class="value">SN32767</span></p>
+      </div>
+      <div class="status-bit-container content-box">        
+        <p class="box-header">Status Bits</p>
+        <div class="divider bottom-spaced"></div>
+        <div class="status-bit-box">
+          <div class="status-msg-text" id="status-message">No status message</div>
+          
+          <div class="status-bit" id="bit0">CFET</div>
+          <div class="status-bit" id="bit1">DFET</div>
+          <div class="status-bit" id="bit2">OV</div>
+          <div class="status-bit" id="bit3">UV</div>
+          <div class="status-bit" id="bit4">DOC</div>
+          <div class="status-bit" id="bit5">COC</div>
+          <div class="status-bit" id="bit6">BIT6</div>
+          <div class="status-bit" id="bit7">BIT7</div>
+          <div class="status-bit" id="bit8">BIT8</div>
+          <div class="status-bit" id="bit9">BIT9</div>
+          <div class="status-bit" id="bit10">BIT10</div>
+          <div class="status-bit" id="bit11">BIT11</div>
+          <div class="status-bit" id="bit12">BIT12</div>
+          <div class="status-bit" id="bit13">BIT13</div>
+          <div class="status-bit" id="bit14">BIT14</div>
+          <div class="status-bit" id="bit15">BIT15</div>
+          <div class="status-bit" id="bit16">BIT16</div>
+          <div class="status-bit" id="bit17">BIT17</div>
+          <div class="status-bit" id="bit18">BIT18</div>
+          <div class="status-bit" id="bit19">BIT19</div>
+          <div class="status-bit" id="bit20">BIT20</div>
+          <div class="status-bit" id="bit21">BIT21</div>
+          <div class="status-bit" id="bit22">BIT22</div>
+          <div class="status-bit" id="bit23">BIT23</div>
+          <div class="status-bit" id="bit24">BIT24</div>
+          <div class="status-bit" id="bit25">BIT25</div>
+          <div class="status-bit" id="bit26">BIT26</div>
+          <div class="status-bit" id="bit27">BIT27</div>
+          <div class="status-bit" id="bit28">DPO</div>
+          <div class="status-bit" id="bit29">UMBIL</div>
+          <div class="status-bit" id="bit30">BIT30</div>
+          <div class="status-bit" id="bit31">BIT31</div>
+          <div class="status-bit" id="bit32">BIT32</div>
+          <div class="status-bit" id="bit33">BIT33</div>
+          <div class="status-bit" id="bit34">BIT24</div>
+          <div class="status-bit" id="bit35">BIT35</div>
+          <div class="status-bit" id="bit36">BIT36</div>
+          <div class="status-bit" id="bit37">BIT37</div>
+          <div class="status-bit" id="bit38">BIT38</div>
+          <div class="status-bit" id="bit39">BIT39</div>
+          <div class="status-bit" id="bit40">BIT40</div>
+          <div class="status-bit" id="bit41">BIT41</div>
+          <div class="status-bit" id="bit42">BIT42</div>
+          <div class="status-bit" id="bit43">BIT43</div>
+          <div class="status-bit" id="bit44">BIT44</div>
+          <div class="status-bit" id="bit45">BIT45</div>
+          <div class="status-bit" id="bit46">BIT46</div>
+          <div class="status-bit" id="bit47">BIT47</div>
+          <div class="status-bit" id="bit48">BIT48</div>
+          <div class="status-bit" id="bit49">BIT49</div>
+          <div class="status-bit" id="bit50">BIT50</div>
+          <div class="status-bit" id="bit51">BIT51</div>
+          <div class="status-bit" id="bit52">BIT52</div>
+          <div class="status-bit" id="bit53">BIT53</div>
+          <div class="status-bit" id="bit54">BIT54</div>
+          <div class="status-bit" id="bit55">BIT55</div>
+        </div>
+      </div>
     </div>
 
 
 
-
+    <div class="divider bottom-spaced"></div>
     <div><span>Last update: </span><span id="time-container"></span></div>
     <button id="get-message">Get message</button>
     <div id="result-container">Push the button...</div>
