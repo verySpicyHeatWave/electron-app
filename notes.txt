@@ -45,6 +45,11 @@ https://medium.com/@abulka/electron-python-4e8c807bfa5e
 
 
 
+# Steel Color Palette:
+https://www.color-hex.com/color-palette/9879
+
+
+
 
 
 ######## Setting up Python backend: ###########################
