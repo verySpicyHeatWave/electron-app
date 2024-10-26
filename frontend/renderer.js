@@ -1,4 +1,4 @@
-const { dialog } = require('electron')
+// import axios from 'axios'
 window.addEventListener("load", fetchData("http://127.0.0.1:5000/stream", "data", true));
 document.getElementById("msg-counters").addEventListener("dblclick", resetCounters);
 document.getElementById("logfile-browse-btn").addEventListener("click", setLogFile)
@@ -77,7 +77,7 @@ function pack_form(data) {
     document.getElementById("dfet-temp").innerHTML = obj.dfet_temp.toString().concat("°C");
     document.getElementById("pcba-temp").innerHTML = obj.board_temp.toString().concat("°C");
     document.getElementById("battery-pn").innerHTML = obj.battery_pn.toString();
-    document.getElementById("battery-sn").innerHTML = "SN".concat(obj.battery_sn.toString());
+    document.getElementById("battery-sn").innerHTML = "SN".concat(obj.battery_sn.toString().padStart(5, '0'));
     colorStatusBits(obj);
 }
 
@@ -123,7 +123,7 @@ function highlightMinMaxCells(obj, elems) {
 
 
 function createCellVoltagesArray(obj) {
-    let cells = [
+    const cells = [
         obj.cell1_voltage, obj.cell2_voltage,
         obj.cell3_voltage, obj.cell4_voltage,
         obj.cell5_voltage, obj.cell6_voltage, 
@@ -132,7 +132,7 @@ function createCellVoltagesArray(obj) {
 }
 
 function loadCellElementsArray() {
-    let cellElements = [
+    const cellElements = [
         document.getElementById("cell1-voltage"),
         document.getElementById("cell2-voltage"),
         document.getElementById("cell3-voltage"),
@@ -159,15 +159,13 @@ function colorStatusBits(obj) {
 }
 
 
-function setLogFile() {
+async function setLogFile() {
     console.log("BCOBB: to-do!");
-    let file = dialog.showSaveDialog(mainWindow, {
-        properties: ['openFile']
-      }).then(result => {
-        console.log(result.canceled)
-        console.log(result.filePaths)
-      }).catch(err => {
-        console.log(err)
-      });
-    console.log(file);
+    await window.axios.post('http://127.0.0.1:5000/log-enable', "we sent something!")
+        .then(function (response) {
+            console.log("It says: ", response.data);
+        }) 
+        .catch(function (error) {
+            console.log(error);
+        });
 }

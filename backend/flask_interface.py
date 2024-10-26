@@ -77,6 +77,10 @@ def stream_data():
 
     return Response(event_stream(), mimetype='text/event-stream')
 
+@app.route('/log-enable', methods=['POST'])
+def toggle_loggle():
+    print("we got something!")
+
 if __name__ == "__main__":
     app.run("localhost", 5000)
     print("we're main!")
