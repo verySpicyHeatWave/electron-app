@@ -1,7 +1,8 @@
 // import axios from 'axios'
+// const ipc = electron.ipcRenderer;
 window.addEventListener("load", fetchData("http://127.0.0.1:5000/stream", "data", true));
 document.getElementById("msg-counters").addEventListener("dblclick", resetCounters);
-document.getElementById("logfile-browse-btn").addEventListener("click", setLogFile)
+document.getElementById("log-data-ckbx").addEventListener("click", setLogFile)
 document.getElementById("log-data-ckbx")
 
 var msg_count = 0;
@@ -161,11 +162,19 @@ function colorStatusBits(obj) {
 
 async function setLogFile() {
     console.log("BCOBB: to-do!");
-    await window.axios.post('http://127.0.0.1:5000/log-enable', "we sent something!")
-        .then(function (response) {
-            console.log("It says: ", response.data);
-        }) 
-        .catch(function (error) {
-            console.log(error);
-        });
+    const isLogging = document.getElementById("log-data-ckbx").checked;
+    await fetch('http://127.0.0.1:5000/log-enable', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "log-data": isLogging
+        })
+    })
+    .then( res => {
+        return res.json
+    })
+    .then( somedata => console.log(somedata))
+    .catch( error => console.log(error));
 }

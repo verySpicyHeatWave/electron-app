@@ -43,6 +43,9 @@ https://tms-dev-blog.com/python-backend-with-javascript-frontend-how-to/
 # Tutorial: Building a deployable Python-Electron App
 https://medium.com/@abulka/electron-python-4e8c807bfa5e
 
+# Tutorial: Electron Interprocess Communication (also launching child windows)
+https://www.geeksforgeeks.org/inter-process-communication-ipc-in-electronjs/#
+
 
 
 # Steel Color Palette:

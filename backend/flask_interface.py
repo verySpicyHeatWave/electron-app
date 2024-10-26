@@ -1,5 +1,5 @@
 import queue
-from flask import Flask, jsonify, Response
+from flask import Flask, jsonify, Response, request
 from flask_cors import CORS
 
 import pika
@@ -79,7 +79,9 @@ def stream_data():
 
 @app.route('/log-enable', methods=['POST'])
 def toggle_loggle():
-    print("we got something!")
+    log_data = request.json['log-data']
+    print("we got something!", log_data)
+    return jsonify({"log-data": log_data})
 
 if __name__ == "__main__":
     app.run("localhost", 5000)
