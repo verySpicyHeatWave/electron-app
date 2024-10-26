@@ -1,7 +1,19 @@
 body {
   padding: 0 20px;
   font-family: 'Open Sans', sans-serif;
-  background-color: #dadada;
+  background-color: #ffffff;
+}
+
+.sidenav {
+  height: 100%; /* Full-height: remove this if you want "auto" height */
+  width: 400px; /* Set the width of the sidebar */
+  position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+  z-index: 1; /* Stay on top */
+  top: 0; /* Stay at the top */
+  left: 0;
+  background-color: #111; /* Black */
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 20px;
 }
 
 .tooltiptext {
@@ -29,21 +41,30 @@ body {
 }
 
 .msg-counters:hover, .status-container:hover {
-  background-image: linear-gradient(130deg, #8fa2b3, #e4ebf0);
+  background-color: #0C3C74;
+  /* background-image: linear-gradient(130deg, #8fa2b3, #e4ebf0); */
+}
+
+.msg-counters:active, .status-container:active {
+  background-color: #082A52;
+  /* background-image: linear-gradient(130deg, #8fa2b3, #e4ebf0); */
 }
 
 
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(7, 120px);
+  grid-template-columns: repeat(7, auto);
   grid-auto-rows: auto;
   gap: 20px;
+  /* margin-left: 400px; */
 }
 
 .content-box {
-  border: 2px solid #333333;
+  /* border: 1px solid #333333; */
   border-radius: 10px;
-  background-image: linear-gradient(130deg, #b1bec7, #e4ebf0);
+  /* background-image: linear-gradient(130deg, #b1bec7, #e4ebf0); */
+  background-color: #10529e;
+  color: #ffffff;
   padding: 2px 5px;
   font-weight: 700;
   overflow: hidden;
@@ -63,6 +84,32 @@ body {
 .temp-container  {
   grid-column: 2;
   grid-row: 2;
+}
+
+.logfile-container {
+  display: grid;
+  grid-column: 3 / 8;
+  grid-row: 4;
+  grid-template-columns: 1fr 4fr;
+  grid-auto-rows: auto;
+}
+
+.logfile-browse-btn {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.logfile-text {
+  grid-column: 2;
+  grid-row: 1;
+  padding: 5px 15px;
+  line-height: 1.47059;
+}
+
+.logfile-checkbox-container {
+  grid-column: 1;
+  grid-row: 2;
+  margin-top: 10px;
 }
 
 .msg-counters {
@@ -88,12 +135,12 @@ body {
 .status-bit-box {  
   display: grid;
   grid-template-columns: repeat(8, 1fr);
-  grid-template-rows: 4fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   margin-bottom: 5px;
 }
 
 .status-msg-text {
-  grid-row: 1;
+  grid-row: 8;
   grid-column: 1 / 9;
 }
 
@@ -102,7 +149,9 @@ body {
   font-size: 14px;
   text-align: center;
   vertical-align: middle;
-  background-color: #f08080;
+  background-color: #ef4e2d;
+  color: #000000;
+  margin: -1px;
 }
 
 .normal {  
@@ -141,18 +190,19 @@ body {
 }
 
 button {
-  background-image: linear-gradient(#42A1EC, #0070C9);
-  border: 1px solid #0077CC;
+  /* background-image: linear-gradient(#F1A548, #F9AB4B); */
+  background-color: #F9AB4B;
+  border: 1px solid #F1A548;
   border-radius: 4px;
   box-sizing: border-box;
-  color: #FFFFFF;
+  color: #332B22;
   cursor: pointer;
   direction: ltr;
   display: block;
-  font-family: "SF Pro Text","SF Pro Icons","AOS Icons","Helvetica Neue",Helvetica,Arial,sans-serif;
+  /* font-family: "SF Pro Text","SF Pro Icons","AOS Icons","Helvetica Neue",Helvetica,Arial,sans-serif; */
   font-size: 17px;
   font-weight: 400;
-  letter-spacing: -.022em;
+  /* letter-spacing: -.022em; */
   line-height: 1.47059;
   min-width: 30px;
   overflow: visible;
@@ -170,18 +220,18 @@ button:disabled {
 }
 
 button:hover {
-  background-image: linear-gradient(#51A9EE, #147BCD);
-  border-color: #1482D0;
+  background-image: linear-gradient(#CF8E3E, #F9AB4B);
+  border-color: #CF8E3E;
   text-decoration: none;
 }
 
 button:active {
-  background-image: linear-gradient(#3D94D9, #0067B9);
-  border-color: #006DBC;
+  background-image: linear-gradient(#AD7734, #F1A548);
+  border-color: #AD7734;
   outline: none;
 }
 
 button:focus {
-  box-shadow: rgba(131, 192, 253, 0.5) 0 0 0 3px;
+  box-shadow: rgba(207, 158, 97, 0.5) 0 0 0 3px;
   outline: none;
 }

@@ -156,7 +156,15 @@ class DataProducer(threading.Thread):
             "cfet_temp" : 0,
             "dfet_temp" : 0,
             "board_temp" : 0,
-            "dpo" : False
+            "status_bits" : [
+                True, True, False, False, False, False, False, False,
+                False, False, False, False, False, False, False, False,
+                False, False, False, False, False, False, False, False,
+                False, False, False, False, False, False, False, False,
+                False, False, False, False, False, False, False, False,
+                False, False, False, False, False, False, False, False,
+                False, False, False, False, False, False, False, False
+            ]
         }
         self.setv: float = 3.5
 
@@ -182,11 +190,34 @@ class DataProducer(threading.Thread):
         self.vals['battery_pn'] = self.parent.pnvar.get()
         self.vals['battery_sn'] = self.parent.snvar.get()
         self.vals["pack_current"] = self.parent.currentvar.get()
-        self.vals["dpo"] = self.parent.dpovar.get()
+        self.vals["status_bits"][28] = self.parent.dpovar.get()
         self.vals["pack_voltage"] = round(packv, 3)
         self.vals["cell_average"] = round(packv / 8, 3)
-        self.vals["cell_range"] = round(maxcell - mincell, 3)
-        ## add average and range calculations to back-end
+        self.vals["cell_range"] = round(maxcell - mincell, 3)        
+        
+        if maxcell > 4.25:
+            self.vals["status_bits"][0] = False
+            self.vals["status_bits"][2] = True
+        elif mincell < 2.8:
+            self.vals["status_bits"][1] = False
+            self.vals["status_bits"][2] = True
+        else:
+            self.vals["status_bits"][0] = True
+            self.vals["status_bits"][1] = True
+            self.vals["status_bits"][2] = False
+            self.vals["status_bits"][3] = False
+        
+        if self.vals["pack_current"] > 13:
+            self.vals["status_bits"][1] = False
+            self.vals["status_bits"][4] = True
+        elif self.vals["pack_current"] < -5:
+            self.vals["status_bits"][0] = False
+            self.vals["status_bits"][5] = True
+        else:
+            self.vals["status_bits"][4] = False
+            self.vals["status_bits"][5] = False
+
+
         
     
     def begin_stream(self, exchange_name='data1'):

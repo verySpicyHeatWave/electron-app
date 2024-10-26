@@ -1,17 +1,11 @@
-let msg_getter = document.getElementById("get-message")
-msg_getter.addEventListener("click", fetchData("http://127.0.0.1:5000/message", "result-container", false));
-msg_getter.addEventListener("click", getDate);
+const { dialog } = require('electron')
 window.addEventListener("load", fetchData("http://127.0.0.1:5000/stream", "data", true));
 document.getElementById("msg-counters").addEventListener("dblclick", resetCounters);
+document.getElementById("logfile-browse-btn").addEventListener("click", setLogFile)
+document.getElementById("log-data-ckbx")
 
 var msg_count = 0;
 var msg_timeout = 0;
-
-function getDate() {
-    const date = new Date().toString();
-    document.getElementById("time-container").textContent = date;
-}
-
 
 function fetchData(address, eid, streaming) {
     return async function(e) {
@@ -35,11 +29,9 @@ function fetchData(address, eid, streaming) {
             }
 
             const data = decoder.decode(value, { stream: streaming });
-            dataDisplay.innerHTML = data;
             if (determineMsgState(data)) {
                 pack_form(data);
             }
-            getDate();
         } while ( streaming );
     } //"Uncaught (in promise) TypeError: Failed to fetch" when the server resets without the GUI resetting -- how to handle?
 }
@@ -63,7 +55,7 @@ function determineMsgState(data) {
 
 function pack_form(data) {
     const obj = JSON.parse(data.replace("Data: ", ""));
-    const cellElems = createCellElementsArray();
+    const cellElems = loadCellElementsArray();
     cellElems[0].innerHTML = obj.cell1_voltage.toFixed(3).concat("V");
     cellElems[1].innerHTML = obj.cell2_voltage.toFixed(3).concat("V");
     cellElems[2].innerHTML = obj.cell3_voltage.toFixed(3).concat("V");
@@ -84,8 +76,8 @@ function pack_form(data) {
     document.getElementById("cfet-temp").innerHTML = obj.cfet_temp.toString().concat("°C");
     document.getElementById("dfet-temp").innerHTML = obj.dfet_temp.toString().concat("°C");
     document.getElementById("pcba-temp").innerHTML = obj.board_temp.toString().concat("°C");
-    document.getElementById("part-number").innerHTML = obj.battery_pn.toString();
-    document.getElementById("serial-number").innerHTML = "SN".concat(obj.battery_sn.toString());
+    document.getElementById("battery-pn").innerHTML = obj.battery_pn.toString();
+    document.getElementById("battery-sn").innerHTML = "SN".concat(obj.battery_sn.toString());
     colorStatusBits(obj);
 }
 
@@ -124,7 +116,7 @@ function highlightMinMaxCells(obj, elems) {
             elems[i].style.backgroundColor = "#92db88";
         }
         else {
-            elems[i].style.backgroundColor = ""
+            elems[i].style.backgroundColor = "";
         }
     }
 }
@@ -135,11 +127,11 @@ function createCellVoltagesArray(obj) {
         obj.cell1_voltage, obj.cell2_voltage,
         obj.cell3_voltage, obj.cell4_voltage,
         obj.cell5_voltage, obj.cell6_voltage, 
-        obj.cell7_voltage, obj.cell8_voltage];
+        obj.cell7_voltage, obj.cell8_voltage]; //BCOBB: Send this over as an array to begin with, you fuckin' MOOK
     return cells;    
 }
 
-function createCellElementsArray() {
+function loadCellElementsArray() {
     let cellElements = [
         document.getElementById("cell1-voltage"),
         document.getElementById("cell2-voltage"),
@@ -154,5 +146,28 @@ function createCellElementsArray() {
 
 
 function colorStatusBits(obj) {
-    console.log("BCOBB: To-Do!")
+    let bits = obj.status_bits;
+    for (let i = 0; i < bits.length; i++) {
+        let elem = document.getElementById("bit".concat(i))
+        if (bits[i]) {
+            elem.style.backgroundColor = "#3df061";
+        }
+        else {
+            elem.style.backgroundColor = "#ef4e2d";
+        }
+    }
+}
+
+
+function setLogFile() {
+    console.log("BCOBB: to-do!");
+    let file = dialog.showSaveDialog(mainWindow, {
+        properties: ['openFile']
+      }).then(result => {
+        console.log(result.canceled)
+        console.log(result.filePaths)
+      }).catch(err => {
+        console.log(err)
+      });
+    console.log(file);
 }

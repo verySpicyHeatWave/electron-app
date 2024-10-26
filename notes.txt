@@ -48,6 +48,10 @@ https://medium.com/@abulka/electron-python-4e8c807bfa5e
 # Steel Color Palette:
 https://www.color-hex.com/color-palette/9879
 
+SIL BLUE:       #10529e
+SIL YELLOW:     #f9ab4b
+SIL RED:        #ef4e2d
+
 
 
 
