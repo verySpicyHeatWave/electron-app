@@ -2,7 +2,7 @@
 // const ipc = electron.ipcRenderer;
 window.addEventListener("load", fetchData("http://127.0.0.1:5000/stream", "data", true));
 document.getElementById("msg-counters").addEventListener("dblclick", resetCounters);
-document.getElementById("log-data-ckbx").addEventListener("click", setLogFile)
+document.getElementById("log-data-ckbx").addEventListener("click", toggleLogger)
 document.getElementById("log-data-ckbx")
 
 var msg_count = 0;
@@ -160,21 +160,36 @@ function colorStatusBits(obj) {
 }
 
 
-async function setLogFile() {
-    console.log("BCOBB: to-do!");
+async function toggleLogger() {
     const isLogging = document.getElementById("log-data-ckbx").checked;
+    const logfilePath = "C:/testdata/logfile.csv" //REPLACE THIS WITH A CHECK ON THE HTML ELEMENT THAT HOLDS THE PATH AND POSSIBLY A CALL TO OPEN A SAVEFILEDIALOG IF A FILE'S NOT BEEN SELECTED
     await fetch('http://127.0.0.1:5000/log-enable', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            "log-data": isLogging
+            "log-data": isLogging,
+            "battery-id": getPnSnFromForm(),
+            "logfile-path": logfilePath
         })
     })
     .then( res => {
         return res.json
     })
-    .then( somedata => console.log(somedata))
     .catch( error => console.log(error));
+}
+
+
+function setLogFileName() {
+    console.log("BCOBB: To-do! I still need to figure out how the fuck I'm supposed to open the savefiledialog from the renderer. This is where the IPCRenderer and/or IPCMain will probably come into play, I guess. Maybe the context bridge.");
+
+}
+
+
+function getPnSnFromForm() {
+    resp = document.getElementById("battery-pn").innerHTML;
+    resp += "-";
+    resp += document.getElementById("battery-sn").innerHTML;
+    return resp;
 }

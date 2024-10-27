@@ -78,10 +78,9 @@ def stream_data():
     return Response(event_stream(), mimetype='text/event-stream')
 
 @app.route('/log-enable', methods=['POST'])
-def toggle_loggle():
-    log_data = request.json['log-data']
-    print("we got something!", log_data)
-    return jsonify({"log-data": log_data})
+def toggle_logging():
+    print("we got something!", request.json)
+    return request.json
 
 if __name__ == "__main__":
     app.run("localhost", 5000)
