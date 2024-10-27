@@ -86,7 +86,7 @@ https://color.adobe.com/create/color-wheel
 
 Things I don't fully understand:
     JAVASCRIPT:
-        async/await :: I sort of understand them, but not fully
+        async/await :: I sort of understand them, but not fully. Just need a deeper understanding.
         fetch :: what does this method DO, exactly? What sort of object is it returning? What is the "getReader" method that it is able to call?
         require :: Why does this method return things? It seems to behave very differently from the import/include calls I'm used to seeing.
 
@@ -94,6 +94,8 @@ Things I don't fully understand:
         yield :: I know it creates a "generator". I think I get it--it doesn't RETURN, thus ending a function, but rather it pauses the function's execution until it's called again? I think? I can play with that and test it.
         Queue object :: I understand it pretty fully, but I really just want to look into best practices and think more about how I'm using it here, and decide whether or not it's really the best option. I think it is, since it will block and wait for the next message, but I have to think about when a battery times out. Would help to see how Matt handled it in the SIL II GUI.
         Threads :: Similar to the other two, I just want a better idea of WHEN and HOW to use threads more effectively. I understand threads and multithreading, but when do I want to use it when building an application like this?
+        app.route :: Why does it HAVE to have something returned? Where is that returned value going? What's the appropriate way to utilize these routes for GET and POST calls?
+        ctypes :: What am I doing in the kill_stream() method of the DataProducer? I need to get a grasp on what exactly is happening there before I use that code again.
 
     RABBITMQ / PIKA:
         Connection objects :: How many different options are there, and why might I prefer a "BlockingConnection" over some other type?
@@ -106,3 +108,7 @@ Things I don't fully understand:
 
     NODE / ELECTRON:
         preload.js :: What's good to put into this file? I have a feeling that one of the functions I have in my renderer.js file should actually be in THIS file.
+        Inter-Process Communication :: It seems like a way to communicate between the "main" process and the "rendering" process, but how do I use it?
+
+    GENERAL CONCEPTS:
+        Dependency injection :: An alternative to the singleton pattern that I've been leaning towards using for some classes, like the LogManager and FlaskInterface? What IS it exactly?

@@ -226,7 +226,8 @@ class DataProducer(threading.Thread):
         channel = connection.channel()
 
         channel.exchange_declare(exchange=exchange_name,
-                                exchange_type='fanout')
+                                exchange_type='fanout',
+                                auto_delete=True)
         while True:
             time.sleep(1)
             self.generate_data()

@@ -31,7 +31,8 @@ def consume_data():
     channel = connection.channel()
 
     channel.exchange_declare(exchange=exchange_name,
-                            exchange_type='fanout')
+                            exchange_type='fanout',
+                            auto_delete=True)
     result = channel.queue_declare(queue='', exclusive=True)
     queue_name = result.method.queue
     channel.queue_bind(exchange=exchange_name, queue=queue_name)
@@ -66,7 +67,7 @@ def stream_data():
             while True:
                 try:
                     msg = subscriber.get(block=True, timeout=1.2)
-                    print(f"Received: {msg}")
+                    print(f"Received a good packet")
                     yield f"Data: {msg}\n\n"
                 except queue.Empty:
                     print("We're not getting any data!")
