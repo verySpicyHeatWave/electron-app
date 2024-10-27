@@ -122,10 +122,17 @@ class MainWindow(tk.Tk):
             self.producer_thread.kill_stream()
             self.producer_thread.join()
             print("Ending stream...\n\n")
+        self.close_exchange()
         self.destroy()
     
     def numentry_verify_callback(self, P):
         return str.isdigit(P) or str(P) == ""
+    
+
+    def close_exchange(self):
+        connection = pika.BlockingConnection(pika.ConnectionParameters(host='127.0.0.1'))
+        channel = connection.channel()
+        channel.exchange_delete(self.exchange)
 
 
 
@@ -228,14 +235,23 @@ class DataProducer(threading.Thread):
         channel.exchange_declare(exchange=exchange_name,
                                 exchange_type='fanout',
                                 auto_delete=True)
-        while True:
-            time.sleep(1)
-            self.generate_data()
-            message = json.dumps(self.vals)
-            channel.basic_publish(exchange=exchange_name,
-                        routing_key='',
-                        body=message)
-            print(message)
+        try:
+            while True:
+                time.sleep(1)
+                self.generate_data()
+                message = json.dumps(self.vals)
+                channel.basic_publish(exchange=exchange_name,
+                            routing_key='',
+                            body=message)
+                print(message)
+        except SystemExit:
+            print("=================================================================")
+            print("Data generation safely killed!")
+        finally:
+            # print(f"Deleting exchange {exchange_name}...")
+            # channel.exchange_delete(exchange_name)
+            print(f"Closing channel...")
+            channel.close()
 
     def kill_stream(self):
         # I want to understand exactly how this works. What is happening with the pythonapi call? I know it's from the C API, but how is that working?
@@ -251,7 +267,6 @@ class DataProducer(threading.Thread):
               ctypes.py_object(SystemExit))
         if res > 1:
             ctypes.pythonapi.PyThreadState_SetAsyncExc(thread_id, 0)
-        self.streaming = False
 
     def put_variation_on_cell_voltage(self, voltage):
         return round(((random.random() - 0.5) *.01 + voltage), 3)
