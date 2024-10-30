@@ -3,10 +3,10 @@
 // All the Node.js APIs are available in the preload process.
 // It has the same sandbox as a Chrome extension.
 
-const { contextBridge } = require('electron')
+const { contextBridge, ipcRenderer } = require('electron')
 
-contextBridge.exposeInMainWorld('dialog', {
-  showSaveDialog: (window, options) => showSaveDialog(window, options)
+contextBridge.exposeInMainWorld('dialogAPI', {
+  saveFile: () => ipcRenderer.invoke('dialog:saveFile')
 })
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -18,4 +18,4 @@ window.addEventListener('DOMContentLoaded', () => {
     for (const dependency of ['chrome', 'node', 'electron']) {
       replaceText(`${dependency}-version`, process.versions[dependency])
     }
-  })
+  });

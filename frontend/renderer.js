@@ -1,12 +1,17 @@
-// import axios from 'axios'
-// const ipc = electron.ipcRenderer;
 window.addEventListener("load", fetchData("http://127.0.0.1:5000/stream", "data", true));
 document.getElementById("msg-counters").addEventListener("dblclick", resetCounters);
-document.getElementById("log-data-ckbx").addEventListener("click", toggleLogger)
-document.getElementById("log-data-ckbx")
+document.getElementById("log-data-ckbx").addEventListener("click", toggleLogger);
+
+document.getElementById("logfile-browse-btn").addEventListener("click", async () => {
+    const fpath = await window.dialogAPI.saveFile();
+    console.log(fpath);
+    document.getElementById("logfile-text").innerHTML = fpath;
+    filePath = fpath;
+});
 
 var msg_count = 0;
 var msg_timeout = 0;
+var filePath = ""
 
 function fetchData(address, eid, streaming) {
     return async function(e) {
@@ -193,3 +198,4 @@ function getPnSnFromForm() {
     resp += document.getElementById("battery-sn").innerHTML;
     return resp;
 }
+
