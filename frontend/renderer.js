@@ -4,6 +4,7 @@ document.getElementById("log-data-ckbx").addEventListener("click", toggleLogger)
 
 document.getElementById("logfile-browse-btn").addEventListener("click", async () => {
     const fpath = await window.dialogAPI.saveFile();
+    if (!fpath) { return }
     console.log(fpath);
     document.getElementById("logfile-text").innerHTML = fpath;
     filePath = fpath;
