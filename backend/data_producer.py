@@ -1,5 +1,7 @@
 import ctypes
 import json
+import logging
+import queue
 import threading
 import pika
 import random
@@ -143,6 +145,8 @@ class DataProducer(threading.Thread):
         super().__init__(None)
         self.parent = parent
         self.exchange = exchange
+        self.logging = False        
+        self.subscriber = queue.Queue(maxsize=5)
         self.vals = {
             "battery_pn" : 0,
             "battery_sn" : 0,
@@ -230,20 +234,35 @@ class DataProducer(threading.Thread):
     def begin_stream(self, exchange_name='data1'):
         print(f"Beginning stream for {self.format_pnsn(self.vals['battery_pn'], self.vals['battery_sn'])} on exchange {exchange_name}")
         connection = pika.BlockingConnection(pika.ConnectionParameters(host='127.0.0.1'))
-        channel = connection.channel()
-
-        channel.exchange_declare(exchange=exchange_name,
+        datastream_channel = connection.channel()
+        datastream_channel.exchange_declare(exchange=exchange_name,
                                 exchange_type='fanout',
                                 auto_delete=True)
+
+        logmsg_channel = connection.channel()
+        logmsg_channel.exchange_declare(exchange="log-flags",
+                                exchange_type='fanout',
+                                auto_delete=True)
+        
+        logmsg_queue = logmsg_channel.queue_declare(queue='', exclusive=True)
+        logmsg_queue_name = logmsg_queue.method.queue
+        logmsg_channel.queue_bind(exchange="log-flags", queue=logmsg_queue_name)
+        logmsg_channel.basic_consume(queue=logmsg_queue_name,
+                                    on_message_callback=self.logmsg_callback,
+                                    auto_ack=True)
+
         try:
             while True:
                 time.sleep(1)
                 self.generate_data()
                 message = json.dumps(self.vals)
-                channel.basic_publish(exchange=exchange_name,
+                datastream_channel.basic_publish(exchange=exchange_name,
                             routing_key='',
                             body=message)
-                print(message)
+                if self.logging:
+                    self.logger.log(logging.DEBUG, message)
+                connection.process_data_events(time_limit=0)
+                # print(message)
         except SystemExit:
             print("=================================================================")
             print("Data generation safely killed!")
@@ -251,7 +270,8 @@ class DataProducer(threading.Thread):
             # print(f"Deleting exchange {exchange_name}...")
             # channel.exchange_delete(exchange_name)
             print(f"Closing channel...")
-            channel.close()
+            datastream_channel.close()
+        
 
     def kill_stream(self):
         # I want to understand exactly how this works. What is happening with the pythonapi call? I know it's from the C API, but how is that working?
@@ -268,9 +288,27 @@ class DataProducer(threading.Thread):
         if res > 1:
             ctypes.pythonapi.PyThreadState_SetAsyncExc(thread_id, 0)
 
-    def put_variation_on_cell_voltage(self, voltage):
-        return round(((random.random() - 0.5) *.01 + voltage), 3)
     
+    def logmsg_callback(self, ch, method, properties, body):
+        message = body.decode('utf-8')
+        msg_dict = json.loads(message)
+
+        try:
+            self.logging = msg_dict["log-data"]
+            self.logger = logging.getLogger(msg_dict["battery-id"])
+            self.logger.setLevel(logging.DEBUG)
+            csv_handler = logging.FileHandler(msg_dict["logfile-path"])
+            csv_handler.setLevel(logging.DEBUG)
+            self.logger.addHandler(csv_handler)
+            
+        except:
+            self.logging = False
+            self.logger = logging.getLogger("void")
+
+
+
+    def put_variation_on_cell_voltage(self, voltage):
+        return round(((random.random() - 0.5) *.01 + voltage), 3)    
 
     def format_pnsn(self, pn, sn):
         return f"{str(pn).rjust(9, "0")} SN{str(sn).rjust(5, "0")}"
@@ -285,3 +323,4 @@ if __name__ == "__main__":
 
     main: MainWindow = MainWindow(exch)
     main.mainloop()
+

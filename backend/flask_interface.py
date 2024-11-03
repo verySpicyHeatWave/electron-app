@@ -1,3 +1,4 @@
+import json
 import queue
 from flask import Flask, jsonify, Response, request
 from flask_cors import CORS
@@ -11,12 +12,25 @@ app = Flask(__name__)
 CORS(app=app)
 
 subscriber = queue.Queue(maxsize=5)
-messages=[]
+# messages=[]
 last_msg: 0
+
+def send_log_flag(json_message):
+    exchange_name = "log-flags"
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host='127.0.0.1'))
+    channel = connection.channel()
+
+    channel.exchange_declare(exchange=exchange_name,
+                            exchange_type='fanout',
+                            auto_delete=True)
+    channel.basic_publish(exchange=exchange_name,
+                routing_key='',
+                body=json_message)
+    channel.close()
 
 def get_data_callback(ch, method, properties, body):
     message = body.decode('utf-8')
-    messages.append(message)
+    # messages.append(message)
     try:
         subscriber.put_nowait(message)
     except queue.Full:
@@ -55,11 +69,11 @@ def get_message():
     print("message endpoint reached...")
     return jsonify({"This is a message from the back end!":"You did it! Yay!"})
 
-@app.route('/data', methods=['GET'])
-def get_data():
-    return jsonify(messages)
+# @app.route('/data', methods=['GET'])
+# def get_data():
+#     return jsonify(messages)
 
-@app.route('/stream')
+@app.route('/stream', methods=['GET'])
 def stream_data():
     def event_stream():
         print("beginning event stream!")
@@ -81,6 +95,7 @@ def stream_data():
 @app.route('/log-enable', methods=['POST'])
 def toggle_logging():
     print("we got something!", request.json)
+    send_log_flag(json.dumps(request.json))
     return request.json
 
 if __name__ == "__main__":

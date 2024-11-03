@@ -10,3 +10,7 @@ backend/__pycache__/
 frontend/node_modules/
 frontend/out/
 plan.txt
+
+# Misc folder
+
+misc_references/
