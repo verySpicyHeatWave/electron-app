@@ -124,17 +124,11 @@ class MainWindow(tk.Tk):
             self.producer_thread.kill_stream()
             self.producer_thread.join()
             print("Ending stream...\n\n")
-        self.close_exchange()
         self.destroy()
     
     def numentry_verify_callback(self, P):
         return str.isdigit(P) or str(P) == ""
     
-
-    def close_exchange(self):
-        connection = pika.BlockingConnection(pika.ConnectionParameters(host='127.0.0.1'))
-        channel = connection.channel()
-        channel.exchange_delete(self.exchange)
 
 
 
@@ -199,7 +193,7 @@ class DataProducer(threading.Thread):
             self.vals[f"{key}_temp"] = val.get()
 
         self.vals['battery_pn'] = self.parent.pnvar.get()
-        self.vals['battery_sn'] = self.parent.snvar.get()
+        self.vals['battery_sn'] = f"SN{str(self.parent.snvar.get()).rjust(5,"0")}"
         self.vals["pack_current"] = self.parent.currentvar.get()
         self.vals["status_bits"][28] = self.parent.dpovar.get()
         self.vals["pack_voltage"] = round(packv, 3)
@@ -250,7 +244,6 @@ class DataProducer(threading.Thread):
         logmsg_channel.basic_consume(queue=logmsg_queue_name,
                                     on_message_callback=self.logmsg_callback,
                                     auto_ack=True)
-
         try:
             while True:
                 time.sleep(1)
@@ -260,9 +253,9 @@ class DataProducer(threading.Thread):
                             routing_key='',
                             body=message)
                 if self.logging:
-                    self.logger.log(logging.DEBUG, message)
+                    self.logger.log(logging.DEBUG, self.create_csv_string())
                 connection.process_data_events(time_limit=0)
-                # print(message)
+                print(self.create_csv_string())
         except SystemExit:
             print("=================================================================")
             print("Data generation safely killed!")
@@ -293,13 +286,18 @@ class DataProducer(threading.Thread):
         message = body.decode('utf-8')
         msg_dict = json.loads(message)
 
+        if msg_dict["battery-id"] != f"{self.vals["battery_pn"]}-{self.vals["battery_sn"]}":
+            return
+
         try:
             self.logging = msg_dict["log-data"]
-            self.logger = logging.getLogger(msg_dict["battery-id"])
-            self.logger.setLevel(logging.DEBUG)
-            csv_handler = logging.FileHandler(msg_dict["logfile-path"])
-            csv_handler.setLevel(logging.DEBUG)
-            self.logger.addHandler(csv_handler)
+            if self.logging:
+                self.logger = logging.getLogger(msg_dict["battery-id"])
+                self.logger.setLevel(logging.DEBUG)
+                csv_handler = logging.FileHandler(msg_dict["logfile-path"])
+                csv_handler.setLevel(logging.DEBUG)
+                self.logger.addHandler(csv_handler)
+                self.logger.log(logging.DEBUG, self.create_csv_header())
             
         except:
             self.logging = False
@@ -308,10 +306,35 @@ class DataProducer(threading.Thread):
 
 
     def put_variation_on_cell_voltage(self, voltage):
-        return round(((random.random() - 0.5) *.01 + voltage), 3)    
+        return round(((random.random() - 0.5) *.01 + voltage), 3)
 
     def format_pnsn(self, pn, sn):
         return f"{str(pn).rjust(9, "0")} SN{str(sn).rjust(5, "0")}"
+    
+    def create_csv_string(self):
+        resp = ""
+        for (key, val) in self.vals.items():
+            if key != "status_bits":
+                resp += f"{val},"
+            else:
+                for val in self.vals["status_bits"]:
+                    resp += f"{val},"
+        return resp[:-1]
+    
+    def create_csv_header(self):
+        resp = ""
+        for key in self.vals.keys():
+            if key != "status_bits":
+                resp += f"{key},"
+            else:
+                for i in range(len(self.vals["status_bits"])):
+                    resp += f"bit{i},"
+        return resp[:-1]
+
+    def close_exchange(self):
+        connection = pika.BlockingConnection(pika.ConnectionParameters(host='127.0.0.1'))
+        channel = connection.channel()
+        channel.exchange_delete(self.exchange)
             
 
 if __name__ == "__main__":

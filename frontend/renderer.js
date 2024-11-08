@@ -1,18 +1,11 @@
 window.addEventListener("load", fetchData("http://127.0.0.1:5000/stream", "data", true));
 document.getElementById("msg-counters").addEventListener("dblclick", resetCounters);
 document.getElementById("log-data-ckbx").addEventListener("click", toggleLogger);
-
-document.getElementById("logfile-browse-btn").addEventListener("click", async () => {
-    const fpath = await window.dialogAPI.saveFile();
-    if (!fpath) { return }
-    console.log(fpath);
-    document.getElementById("logfile-text").innerHTML = fpath;
-    filePath = fpath;
-});
+document.getElementById("logfile-browse-btn").addEventListener("click", requestLogFile);
 
 var msg_count = 0;
 var msg_timeout = 0;
-var filePath = ""
+var logFile = ""
 
 function fetchData(address, eid, streaming) {
     return async function(e) {
@@ -40,7 +33,7 @@ function fetchData(address, eid, streaming) {
                 pack_form(data);
             }
         } while ( streaming );
-    } //"Uncaught (in promise) TypeError: Failed to fetch" when the server resets without the GUI resetting -- how to handle?
+    }
 }
 
 
@@ -84,7 +77,7 @@ function pack_form(data) {
     document.getElementById("dfet-temp").innerHTML = obj.dfet_temp.toString().concat("°C");
     document.getElementById("pcba-temp").innerHTML = obj.board_temp.toString().concat("°C");
     document.getElementById("battery-pn").innerHTML = obj.battery_pn.toString();
-    document.getElementById("battery-sn").innerHTML = "SN".concat(obj.battery_sn.toString().padStart(5, '0'));
+    document.getElementById("battery-sn").innerHTML = obj.battery_sn.toString();
     colorStatusBits(obj);
 }
 
@@ -168,7 +161,14 @@ function colorStatusBits(obj) {
 
 async function toggleLogger() {
     const isLogging = document.getElementById("log-data-ckbx").checked;
-    const logfilePath = "C:/testdata/logfile.csv" //REPLACE THIS WITH A CHECK ON THE HTML ELEMENT THAT HOLDS THE PATH AND POSSIBLY A CALL TO OPEN A SAVEFILEDIALOG IF A FILE'S NOT BEEN SELECTED
+    if (logFile == "") {
+        await requestLogFile();
+    }
+    if (logFile == "") {
+        document.getElementById("log-data-ckbx").checked = false;
+        return;
+    }
+    
     await fetch('http://127.0.0.1:5000/log-enable', {
         method: 'POST',
         headers: {
@@ -177,7 +177,7 @@ async function toggleLogger() {
         body: JSON.stringify({
             "log-data": isLogging,
             "battery-id": getPnSnFromForm(),
-            "logfile-path": logfilePath
+            "logfile-path": logFile
         })
     })
     .then( res => {
@@ -187,11 +187,6 @@ async function toggleLogger() {
 }
 
 
-function setLogFileName() {
-    console.log("BCOBB: To-do! I still need to figure out how the fuck I'm supposed to open the savefiledialog from the renderer. This is where the IPCRenderer and/or IPCMain will probably come into play, I guess. Maybe the context bridge.");
-
-}
-
 
 function getPnSnFromForm() {
     resp = document.getElementById("battery-pn").innerHTML;
@@ -200,3 +195,12 @@ function getPnSnFromForm() {
     return resp;
 }
 
+
+
+async function requestLogFile() {
+    const fpath = await window.dialogAPI.saveFile();
+    if (!fpath) { return "" }
+    console.log(fpath);
+    document.getElementById("logfile-text").innerHTML = fpath;
+    logFile = fpath;
+}
