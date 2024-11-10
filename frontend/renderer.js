@@ -1,11 +1,27 @@
 window.addEventListener("load", fetchData("http://127.0.0.1:5000/stream", "data", true));
-document.getElementById("msg-counters").addEventListener("dblclick", resetCounters);
-document.getElementById("log-data-ckbx").addEventListener("click", toggleLogger);
-document.getElementById("logfile-browse-btn").addEventListener("click", requestLogFile);
+window.addEventListener('DOMContentLoaded', () => {
+    document.getElementById("msg-counters").addEventListener("dblclick", resetCounters);
+    document.getElementById("log-data-ckbx").addEventListener("click", toggleLogger);
+    document.getElementById("logfile-browse-btn").addEventListener("click", requestLogFile);
+    document.getElementById("find-battery").addEventListener("click", () => window.dialogAPI.requestStreamName());
+  });
+
+
 
 var msg_count = 0;
 var msg_timeout = 0;
 var logFile = ""
+
+window.dialogAPI.onExchangeRequest((value) => {
+    console.log(value);
+    /*  After receiving the value, we need to:
+            1) Verify that the exchange is regularly producing data (Python side)
+                If not, tell the user they done fucked up and move on. Otherwise...
+            2) Create a new tab for the new battery, with its PN-SN.
+            3) Create an event listener for the tab which sends the new exchange to watch over to the Flask side
+            4) When Flask receives the new exchange name, it needs to seamlessly transition to subscribing to the new stream.
+    */
+})
 
 function fetchData(address, eid, streaming) {
     return async function(e) {
@@ -18,7 +34,6 @@ function fetchData(address, eid, streaming) {
 
         const reader = response.body.getReader();
         const decoder = new TextDecoder("utf-8");
-        const dataDisplay = document.getElementById(eid);
 
         do {
             const { done, value } = await reader.read();

@@ -1,0 +1,21 @@
+<!--index.html-->
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' http://127.0.0.1:5000/; script-src 'self'">
+    <title>Input Box</title>
+    <link id="main-css" rel="stylesheet" type="text/css" href="styles.css">
+  </head>
+
+  <body>
+    <script src="./inputBoxRenderer.js"></script>
+    <div class="input-box"></div>
+    <p class="centered">Exchange name:</p>
+    <input class="centered" type="text" id="exchange-input">
+    <div>
+      <button class="centered" id="input-box-ok">Ok</button>
+      <button class="centered" id="input-box-cancel">Cancel</button>
+    </div>
+  </body>

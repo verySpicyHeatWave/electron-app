@@ -10,18 +10,24 @@
   </head>
 
   <body>
-    <!-- <div class="sidenav">
+    <script src="./renderer.js"></script>
+
+    <div class="sidenav">
       <img src="resources/sil_logo.png">
       <h1>Mock Battery Monitor</h1>
-    </div> -->
-    <!-- <img src="resources/sil_logo.png"> -->    
+      <div class="divider"></div>
+      <button id="find-battery">Find New Battery</button>
+    </div>
+
     <div class="grid-container box">
+
       <div class="pack-criticals content-box">
         <p class="box-header">Pack Power Information</p>
         <div class="divider bottom-spaced"></div>
         <p class="emphasize">Voltage: <span id="pack-voltage" class="value">33.567V</span></p>
         <p class="emphasize">Current: <span id="pack-current" class="value">0.000A</span></p>
       </div>
+
       <div class="cellv-container content-box">
         <p class="box-header">Cell Voltages</p>
         <div class="divider bottom-spaced"></div>
@@ -37,6 +43,7 @@
         <p class="normal">Average: <span id="cell-average" class="value">-</span></p>
         <p class="normal">Range: <span id="cell-range" class="value">-</span></p>
       </div>
+
       <div class="temp-container content-box">
         <p class="box-header">Temperatures</p>
         <div class="divider bottom-spaced"></div>
@@ -47,6 +54,7 @@
         <p class="normal">CFET: <span id="cfet-temp" class="value">-</span></p>
         <p class="normal">PCBA: <span id="pcba-temp" class="value">-</span></p>
       </div>
+
       <div class="msg-counters content-box" id="msg-counters">
         <p class="box-header">Counters</p>
         <div class="divider bottom-spaced"></div>
@@ -54,6 +62,7 @@
         <p class="normal">Timeouts: <span id="msg-timeouts" class="value">0</span></p>
         <span class="tooltiptext">Double click this block to reset the values</span>
       </div>
+
       <div class="pnsn-container content-box">
         <p class="box-header">Product Identifiers</p>
         <div class="divider bottom-spaced"></div>
@@ -62,6 +71,7 @@
         <p class="normal">PCBA P/N: <span id="battery-pn" class="value">268435455</span></p>
         <p class="normal">PCBA S/N: <span id="battery-sn" class="value">SN32767</span></p>
       </div>
+
       <div class="status-bit-container content-box">        
         <p class="box-header">Status Bits</p>
         <div class="divider bottom-spaced"></div>
@@ -125,6 +135,7 @@
           <!-- <div class="status-msg-text" id="status-message">No status message</div> -->
         </div>
       </div>
+
       <div class="logfile-container">
         <button class="logfile-browse-btn" id="logfile-browse-btn">Browse</button>
         <span class="logfile-text" id="logfile-text">No Log File Selected...</span>
@@ -133,16 +144,11 @@
           <label for="log-data-ckbx">Log Data</label>
         </div>
       </div>
+
     </div>
-
-
-
     <div class="divider bottom-spaced"></div>
-    <!-- <div><span>Last update: </span><span id="time-container"></span></div>
-    <button id="get-message">Get message</button>
-    <div id="result-container">Push the button...</div>
-    <div><span>Raw data: </span><span id="data">No data received...</span></div> -->
-    <script src="./renderer.js"></script>
+
+    <div class="taskbar"></div>
   
   </body>
 </html>
