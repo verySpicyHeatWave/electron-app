@@ -7,9 +7,6 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById("input-box-cancel").addEventListener("click", () => {
-        window.resp.sendToMain(null);
         window.close();
     });
   });
-
-

@@ -48,8 +48,8 @@ app.whenReady().then(() => {
   })
 
   ipcMain.on("inputBox:resp", (event, exchange) => {
-    console.log(exchange);
     mainWindow.webContents.send("exchange-name", exchange);
+    //BCOBB: Maybe I should just send it NOT to the ren derer process, but instead it should go directly to FLASK from here.
   })
 
   app.on('activate', () => {

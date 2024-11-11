@@ -12,9 +12,25 @@ var msg_count = 0;
 var msg_timeout = 0;
 var logFile = ""
 
-window.dialogAPI.onExchangeRequest((value) => {
+
+window.dialogAPI.onExchangeRequest(async (value) => {
     console.log(value);
-    /*  After receiving the value, we need to:
+    await fetch('http://127.0.0.1:5000/set-exchange', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "exchange": value
+        })
+    })
+    .then( res => {
+        console.log(res)
+    })
+    .catch( error => console.log(error));
+
+    /*  BCOBB:
+        After receiving the value, we need to:
             1) Verify that the exchange is regularly producing data (Python side)
                 If not, tell the user they done fucked up and move on. Otherwise...
             2) Create a new tab for the new battery, with its PN-SN.
